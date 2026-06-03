@@ -19,12 +19,25 @@ const playfair = Playfair_Display({
 })
 
 export const metadata: Metadata = {
-  title: "CB Equity | Financial Advisory & Wealth Management",
-  description: "Brooke Adams & Connor Savenas — financial planning, insurance, securities, annuities, and wealth management. Independent 1099 opportunities and college-credit internships.",
-  openGraph: {
-    title: "CB Equity | Financial Advisory & Wealth Management",
-    description: "Financial planning, insurance, securities, and wealth management by Brooke Adams & Connor Savenas.",
+  title: {
+    default: 'CB Equity | Elite Financial Planning & Wealth Management',
+    template: '%s | CB Equity'
   },
+  description: 'High-net-worth financial planning, insurance, securities, and wealth management by Brooke Adams & Connor Savenas. Empowering your financial legacy.',
+  keywords: ['Financial Planning', 'Wealth Management', 'Insurance', 'Securities', 'CB Equity', 'Brooke Adams', 'Connor Savenas', 'Tax Optimization'],
+  authors: [{ name: 'CB Equity' }],
+  openGraph: {
+    title: 'CB Equity | Elite Financial Planning',
+    description: 'Professional wealth management and financial strategies for high-net-worth individuals.',
+    url: 'https://cbequity.com',
+    siteName: 'CB Equity',
+    locale: 'en_US',
+    type: 'website',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  }
 }
 
 export default function RootLayout({

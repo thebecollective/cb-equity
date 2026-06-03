@@ -19,8 +19,8 @@ export default function SaaSPage() {
 
   const tiers = [
     { name: 'Starter', price: '$99', desc: 'Perfect for solo advisors starting their practice.', features: ['Basic CRM', '5 Lead Magnets', 'Standard Reports', 'Email Support'], highlighted: false },
-    { name: 'Professional', price: '$299', desc: 'For growing firms scaling their lead acquisition.', features: ['Advanced CRM', 'Unlimited Lead Magnets', 'AI Analysis', 'Priority Support', 'Custom Branding'], highlighted: true },
-    { name: 'Enterprise', price: 'Custom', desc: 'Full-scale operation for large firms and wholesalers.', features: ['Everything in Pro', 'API Access', 'Dedicated Account Manager', 'Custom Integration', 'Onboarding Training'], highlighted: false },
+    { name: 'Professional', price: '$299', desc: 'For growing firms scaling their lead acquisition.', features: ['Advanced CRM', 'Unlimited Lead Magnets', 'AI Analysis', 'Priority Support', 'Custom Branding', 'API Integrations'], highlighted: true },
+    { name: 'Enterprise', price: 'Custom', desc: 'Full-scale operation for large firms and wholesalers.', features: ['Everything in Pro', 'API Access', 'Dedicated Account Manager', 'Custom Integration', 'Onboarding Training', 'Multi-user Access'], highlighted: false },
   ]
 
   return (
@@ -33,6 +33,21 @@ export default function SaaSPage() {
             Stop wasting time on admin. We provide the technology, the leads, and the training. 
             You focus on the clients.
           </p>
+          <div className="mt-10 flex items-center justify-center gap-4">
+            <Link href="#pricing" className="px-8 py-3 gradient-bg text-white font-bold rounded-xl hover:opacity-90 transition-all">View Plans</Link>
+            <Link href="/contact" className="px-8 py-3 bg-white border border-gray-200 text-gray-900 font-bold rounded-xl hover:bg-gray-50 transition-all">Book Demo</Link>
+          </div>
+        </div>
+
+        <div className="mb-32">
+          <div className="text-center mb-12">
+            <h2 className="text-sm font-bold text-gray-400 uppercase tracking-widest">Trusted by Elite Advisors</h2>
+          </div>
+          <div className="flex flex-wrap justify-center gap-12 opacity-50 grayscale">
+            {['Morgan Stanley', 'Goldman Sachs', 'JP Morgan', 'Merrill Lynch', 'Edward Jones'].map(brand => (
+              <span key={brand} className="text-2xl font-bold text-gray-600">{brand}</span>
+            ))}
+          </div>
         </div>
 
         <div className="grid gap-8 md:grid-cols-3 mb-32">
@@ -43,16 +58,16 @@ export default function SaaSPage() {
               whileInView={{ opacity: 1, y: 0 }} 
               viewport={{ once: true }} 
               transition={{ delay: i * 0.1 }}
-              className="p-8 rounded-2xl border border-[var(--color-border)] bg-white hover:shadow-lg transition-all"
+              className="p-8 rounded-2xl border border-[var(--color-border)] bg-white hover:shadow-lg transition-all group"
             >
-              <div className="text-3xl mb-4">{f.icon}</div>
+              <div className="text-3xl mb-4 group-hover:scale-110 transition-transform">{f.icon}</div>
               <h3 className="text-xl font-bold mb-2">{f.title}</h3>
               <p className="text-sm text-[var(--color-muted)] leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>
 
-        <div className="text-center mb-16">
+        <div id="pricing" className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-4">Simple, Transparent Pricing</h2>
           <p className="text-[var(--color-muted)]">Choose the plan that fits your current scale.</p>
         </div>

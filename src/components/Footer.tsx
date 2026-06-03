@@ -30,14 +30,23 @@ const footerLinks = [
       { href: '/login', label: 'Portal Login' },
     ],
   },
+  {
+    title: 'Legal',
+    links: [
+      { href: '/privacy', label: 'Privacy Policy' },
+      { href: '/terms', label: 'Terms of Service' },
+      { href: '/compliance', label: 'Form ADV' },
+      { href: '/disclosures', label: 'Legal Disclosures' },
+    ],
+  },
 ]
 
 export default function Footer() {
   return (
     <footer className="gradient-bg text-white">
       <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="space-y-4">
+        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="space-y-4 lg:col-span-1">
             <Link href="/" className="flex items-center gap-3">
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-sm font-bold text-white">
                 CB
@@ -73,6 +82,11 @@ export default function Footer() {
         </div>
         <div className="mt-12 border-t border-white/10 pt-8 text-center text-sm text-white/45">
           <p>&copy; {new Date().getFullYear()} CB Equity Financial Advisory. All rights reserved.</p>
+          <p className="mx-auto mt-4 max-w-4xl text-[10px] leading-relaxed uppercase tracking-wider opacity-60">
+            Important Disclosure: Investment advisory services offered through CB Equity. 
+            Insurance products and services are offered through licensed insurance producers. 
+            Past performance is no guarantee of future results. Please consult with a professional regarding your specific financial situation.
+          </p>
           <p className="mx-auto mt-2 max-w-3xl text-xs leading-relaxed">
             Securities offered through registered representatives. Insurance products offered through licensed agents.
             This site is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy.

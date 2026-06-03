@@ -13,11 +13,30 @@ export default function FinancialHealthCheck() {
   const [loading, setLoading] = useState(false)
 
   const calculateScore = () => {
-    let score = 50
-    if (parseInt(formData.savings) > 10000) score += 20
-    if (parseInt(formData.debt) < 5000) score += 20
-    if (parseInt(formData.income) > 50000) score += 10
+    let score = 20
+    const savings = parseInt(formData.savings) || 0
+    const debt = parseInt(formData.debt) || 0
+    const income = parseInt(formData.income) || 0
+
+    // Savings vs Income Ratio (Ideally 20%+)
+    if (savings > 10000) score += 20
+    if (savings > 50000) score += 10
+
+    // Debt vs Income Ratio (Low debt = high score)
+    if (debt < 5000) score += 25
+    else if (debt < 25000) score += 15
+
+    // Income Level
+    if (income > 100000) score += 15
+    else if (income > 50000) score += 10
+
     return Math.min(score, 100)
+  }
+
+  const getFeedback = (score: number) => {
+    if (score >= 80) return { text: 'Elite', color: 'text-green-600', desc: 'You have a very strong foundation. We can focus on advanced tax optimization and estate legacy.' }
+    if (score >= 50) return { text: 'Stable', color: 'text-yellow-600', desc: 'You are doing well, but there are gaps in your protection and growth strategies.' }
+    return { text: 'At Risk', color: 'text-red-600', desc: 'Your current financial structure is vulnerable. Immediate optimization is recommended.' }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -50,7 +69,7 @@ export default function FinancialHealthCheck() {
         <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
           <div className="bg-[#1e3a5f] p-8 text-center text-white">
             <h2 className="text-3xl font-bold">Free Financial Health Check-up</h2>
-            <p className="mt-2 text-white/70">Get your score in 60 seconds and see where you stand.</p>
+            <p className="mt-2 text-white/70">Get your personalized Wealth Score and a custom gap analysis.</p>
           </div>
           
           <div className="p-8">
@@ -69,7 +88,7 @@ export default function FinancialHealthCheck() {
                 <button type="button" onClick={() => setStep(2)} className="w-full py-3 bg-[#1e3a5f] text-white rounded-xl font-bold hover:bg-[#2d5a8e] transition-all">Next Step →</button>
               </motion.form>
             )}
-
+            
             {step === 2 && (
               <motion.form initial={{ opacity: 0 }} animate={{ opacity: 1 }} onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -81,6 +100,10 @@ export default function FinancialHealthCheck() {
                     <label className="block text-sm font-medium text-gray-700 mb-1">Total Debt ($)</label>
                     <input type="number" required value={formData.debt} onChange={e => setFormData({...formData, debt: e.target.value})} className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a5f]/20" />
                   </div>
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Annual Household Income ($)</label>
+                    <input type="number" required value={formData.income} onChange={e => setFormData({...formData, income: e.target.value})} className="w-full px-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a5f]/20" />
+                  </div>
                 </div>
                 <div className="flex gap-4">
                   <button type="button" onClick={() => setStep(1)} className="flex-1 py-3 border border-gray-200 rounded-xl font-medium text-gray-600">Back</button>
@@ -90,7 +113,7 @@ export default function FinancialHealthCheck() {
                 </div>
               </motion.form>
             )}
-
+            
             {step === 3 && (
               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-6">
                 <div className="relative inline-flex items-center justify-center">
@@ -100,8 +123,14 @@ export default function FinancialHealthCheck() {
                   </svg>
                   <span className="absolute text-3xl font-bold">{result}%</span>
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900">Your Financial Health Score</h3>
-                <p className="text-gray-500">Based on your data, you're doing {result && result > 70 ? 'great!' : 'okay, but there is room for growth.'} One of our advisors will contact you with a custom roadmap.</p>
+                <div>
+                  <h3 className={`text-3xl font-bold ${getFeedback(result || 0).color}`}>
+                    {getFeedback(result || 0).text}
+                  </h3>
+                  <p className="mt-2 text-gray-500 max-w-md mx-auto">
+                    {getFeedback(result || 0).desc}
+                  </p>
+                </div>
                 <Link href="/contact" className="inline-block px-8 py-3 bg-[#1e3a5f] text-white rounded-xl font-bold hover:bg-[#2d5a8e]">Book Full Consultation</Link>
               </motion.div>
             )}

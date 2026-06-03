@@ -3,6 +3,17 @@
 import { useState, useEffect } from 'react'
 import StatsCard from '@/components/dashboard/StatsCard'
 import DataTable from '@/components/dashboard/DataTable'
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+} from 'recharts'
 
 export default function PerformancePage() {
   const [stats, setStats] = useState({
@@ -13,6 +24,22 @@ export default function PerformancePage() {
   })
   const [recentWins, setRecentWins] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+
+  const revenueData = [
+    { month: 'Jan', revenue: 4200, leads: 12 },
+    { month: 'Feb', revenue: 5800, leads: 18 },
+    { month: 'Mar', revenue: 7100, leads: 22 },
+    { month: 'Apr', revenue: 6200, leads: 15 },
+    { month: 'May', revenue: 9400, leads: 28 },
+    { month: 'Jun', revenue: 11000, leads: 32 },
+  ]
+
+  const funnelData = [
+    { stage: 'New Leads', value: 100, color: '#1e3a5f' },
+    { stage: 'Discovery', value: 65, color: '#2d4a73' },
+    { stage: 'Analysis', value: 40, color: '#3b5c8a' },
+    { stage: 'Closed', value: 24, color: '#c9a84c' },
+  ]
 
   useEffect(() => {
     async function fetchPerformance() {
@@ -60,6 +87,48 @@ export default function PerformancePage() {
         <StatsCard title="Pending Payouts" value={`$${stats.pendingPayouts.toLocaleString()}`} icon={<span>⏳</span>} color="#f59e0b" />
       </div>
 
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-6">Revenue Growth</h2>
+          <div className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={revenueData}>
+                <defs>
+                  <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#1e3a5f" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="#1e3a5f" stopOpacity={0}/>
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <XAxis dataKey="month" tick={{fontSize: 12}} axisLine={false} tickLine={false} />
+                <YAxis tickFormatter={(val) => `$${val/1000}k`} tick={{fontSize: 12}} axisLine={false} tickLine={false} />
+                <Tooltip formatter={(val) => `$${val.toLocaleString()}`} />
+                <Area type="monotone" dataKey="revenue" stroke="#1e3a5f" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+          <h2 className="text-lg font-bold text-gray-900 mb-6">Conversion Funnel</h2>
+          <div className="h-72">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={funnelData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
+                <XAxis type="number" hide />
+                <YAxis dataKey="stage" type="category" tick={{fontSize: 12}} width={100} axisLine={false} tickLine={false} />
+                <Tooltip formatter={(val) => `${val}%`} />
+                <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                  {funnelData.map((entry, index) => (
+                    <rect key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
           <h2 className="text-lg font-bold text-gray-900 mb-4">Recent Commissions</h2>
@@ -105,3 +174,4 @@ export default function PerformancePage() {
     </div>
   )
 }
+

@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from 'react'
 import Link from 'next/link'
 import Modal from '@/components/dashboard/Modal'
 import LearningModuleCard from '@/components/education/LearningModuleCard'
-import { aiModules } from '@/lib/education-data'
+import { aiModules, stateLawStats } from '@/lib/education-data'
 
 type Tab = 'courses' | 'quizzes' | 'ai'
 
@@ -474,6 +474,21 @@ export default function EducationPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
           </svg>
           Open AI Assistant
+        </Link>
+      </div>
+
+      <div className="mb-6 rounded-2xl border border-emerald-200/80 bg-emerald-50/50 p-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h2 className="text-sm font-bold text-[#1a3352]">State Life & Health Law Courses</h2>
+          <p className="mt-1 text-xs text-gray-600">
+            {stateLawStats.courses} courses across {stateLawStats.states} states — licensing, replacements, and exam prep by jurisdiction.
+          </p>
+        </div>
+        <Link
+          href="/education/state-laws"
+          className="shrink-0 rounded-lg bg-[#1e3a5f] px-4 py-2 text-xs font-semibold text-white hover:bg-[#1e3a5f]/90"
+        >
+          Open state catalog
         </Link>
       </div>
 

@@ -21,7 +21,33 @@ interface Lead {
   updatedAt: string
 }
 
+// AI Lead Scoring Logic
+const calculateLeadScore = (lead: Lead) => {
+  let score = 0
+  // Value Score (Higher value = higher score)
+  if (lead.value > 100000) score += 40
+  else if (lead.value > 50000) score += 20
+  else if (lead.value > 0) score += 10
+
+  // Status Score (Further in pipeline = higher score)
+  const statusWeights = { new: 10, contacted: 20, qualified: 40, proposal: 70, closed: 100, lost: 0 }
+  score += statusWeights[lead.status] || 0
+
+  // Source Score (Qualified sources)
+  if (lead.source === 'referral') score += 30
+  else if (lead.source === 'website') score += 15
+
+  return Math.min(score, 100)
+}
+
+const getScoreColor = (score: number) => {
+  if (score >= 80) return 'text-green-600 bg-green-50 border-green-200'
+  if (score >= 50) return 'text-amber-600 bg-amber-50 border-amber-200'
+  return 'text-gray-600 bg-gray-50 border-gray-200'
+}
+
 interface LeadForm {
+
   name: string
   email: string
   phone: string
@@ -135,6 +161,14 @@ export default function LeadsPage() {
           columns={[
             { key: 'name', label: 'Name' },
             { key: 'email', label: 'Email' },
+            { 
+              key: 'score', 
+              label: 'AI Score', 
+              render: (l) => {
+                const score = calculateLeadScore(l)
+                return <span className={`text-[10px] font-bold px-2 py-1 rounded-full border ${getScoreColor(score)}`}>{score}%</span>
+              } 
+            },
             { key: 'status', label: 'Status', render: (l) => <span className="text-xs font-medium px-2 py-1 rounded-full bg-gray-100">{l.status}</span> },
             { key: 'value', label: 'Value', render: (l) => `$${l.value?.toLocaleString()}` },
             { key: 'source', label: 'Source' },
@@ -146,6 +180,7 @@ export default function LeadsPage() {
           onDelete={async (id) => { if(confirm('Delete lead?')) { await fetch(`/api/leads/${id}`, { method: 'DELETE' }); fetchLeads(); }}}
         />
       ) : (
+
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {pipelineStages.map(stage => (
             <div key={stage.id} className="flex flex-col gap-4">

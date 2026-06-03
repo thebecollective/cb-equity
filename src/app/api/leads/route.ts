@@ -1,6 +1,19 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
+import { z } from 'zod'
 import { getAll, create, generateId } from '@/lib/db'
+
+const LeadSchema = z.object({
+  name: z.string().min(2, 'Name is required'),
+  email: z.string().email('Invalid email address'),
+  phone: z.string().optional(),
+  source: z.string().optional(),
+  interest: z.array(z.string()).optional(),
+  notes: z.string().optional(),
+  status: z.string().optional(),
+  value: z.number().optional(),
+  userId: z.string().optional(),
+})
 
 export async function GET() {
   try {
@@ -18,21 +31,25 @@ export async function POST(req: Request) {
     const session = await auth()
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     const body = await req.json()
-    if (!body.name || !body.email) {
-      return NextResponse.json({ error: 'Name and email are required' }, { status: 400 })
+    const result = LeadSchema.safeParse(body)
+
+    if (!result.success) {
+      return NextResponse.json({ error: result.error.errors[0].message }, { status: 400 })
     }
+
+    const data = result.data
     const now = new Date().toISOString()
     const lead = await create('leads', {
       id: generateId(),
-      userId: body.userId || (session.user as any).id,
-      name: body.name,
-      email: body.email,
-      phone: body.phone || '',
-      source: body.source || 'other',
-      interest: body.interest || [],
-      notes: body.notes || '',
-      status: body.status || 'new',
-      value: body.value || 0,
+      userId: data.userId || (session.user as any).id,
+      name: data.name,
+      email: data.email,
+      phone: data.phone || '',
+      source: data.source || 'other',
+      interest: data.interest || [],
+      notes: data.notes || '',
+      status: data.status || 'new',
+      value: data.value || 0,
       createdAt: now,
       updatedAt: now,
     }, (session.user as any).id)

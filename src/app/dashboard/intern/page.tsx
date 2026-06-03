@@ -13,6 +13,15 @@ const onboardingTasks = [
 ]
 
 export default function InternHub() {
+  const ranks = [
+    { rank: 'Junior Associate', threshold: 0, color: 'text-gray-500' },
+    { rank: 'Associate', threshold: 2, color: 'text-blue-500' },
+    { rank: 'Senior Associate', threshold: 5, color: 'text-indigo-500' },
+    { rank: 'Lead Advisor', threshold: 10, color: 'text-[#c9a84c]' },
+  ]
+
+  const currentRank = ranks.reverse().find(r => 4 >= r.threshold) || ranks[0]
+
   return (
     <div className="space-y-8">
       <header className="flex items-center justify-between">
@@ -23,11 +32,12 @@ export default function InternHub() {
         <div className="flex items-center gap-3">
           <div className="text-right">
             <p className="text-xs font-semibold text-gray-400 uppercase">Current Rank</p>
-            <p className="text-sm font-bold text-[#c9a84c]">Junior Associate</p>
+            <p className={`text-sm font-bold ${currentRank.color}`}>{currentRank.rank}</p>
           </div>
           <div className="h-10 w-10 rounded-full bg-gradient-to-br from-[#1e3a5f] to-[#c9a84c] border-2 border-white shadow-sm" />
         </div>
       </header>
+
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatsCard title="Modules Completed" value="4 / 42" icon={<span>📚</span>} color="#1e3a5f" />
@@ -35,33 +45,34 @@ export default function InternHub() {
         <StatsCard title="Leads Processed" value="12" icon={<span>👥</span>} color="#059669" />
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Learning Roadmap */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
-            <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span>🚀</span> Your Onboarding Roadmap
-            </h2>
-            <div className="space-y-3">
-              {onboardingTasks.map((task) => (
-                <div key={task.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <input type="checkbox" checked={task.completed} readOnly className="h-4 w-4 rounded border-gray-300 text-[#1e3a5f] focus:ring-[#1e3a5f]" />
-                    <div>
-                      <p className={`text-sm font-medium ${task.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>{task.task}</p>
-                      <span className="text-[10px] uppercase tracking-wider text-gray-400">{task.category}</span>
-                    </div>
-                  </div>
-                  {task.completed ? (
-                    <span className="text-xs font-bold text-green-600">Done ✓</span>
-                  ) : (
-                    <button className="text-xs font-semibold text-[#1e3a5f] hover:underline">Start Now</button>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+         {/* Learning Roadmap */}
+         <div className="lg:col-span-2 space-y-6">
+           <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+             <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+               <span>🚀</span> Your Onboarding Roadmap
+             </h2>
+             <div className="space-y-3">
+               {onboardingTasks.map((task) => (
+                 <div key={task.id} className="flex items-center justify-between p-4 rounded-xl border border-gray-100 bg-gray-50 hover:bg-gray-100 transition-colors">
+                   <div className="flex items-center gap-3">
+                     <input type="checkbox" checked={task.completed} readOnly className="h-4 w-4 rounded border-gray-300 text-[#1e3a5f] focus:ring-[#1e3a5f]" />
+                     <div>
+                       <p className={`text-sm font-medium ${task.completed ? 'line-through text-gray-400' : 'text-gray-700'}`}>{task.task}</p>
+                       <span className="text-[10px] uppercase tracking-wider text-gray-400">{task.category}</span>
+                     </div>
+                   </div>
+                   {task.completed ? (
+                     <span className="text-xs font-bold text-green-600">Done ✓</span>
+                   ) : (
+                     <button className="text-xs font-semibold text-[#1e3a5f] hover:underline">Start Now</button>
+                   )}
+                 </div>
+               ))}
+             </div>
+           </div>
+         </div>
+
 
         {/* Mentor & Support */}
         <div className="space-y-6">

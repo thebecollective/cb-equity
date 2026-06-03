@@ -6,7 +6,7 @@ export async function GET() {
   try {
     const session = await auth()
     if (!session) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    const planningData = await getAll('planningData')
+    const planningData = await getAll('planning')
     return NextResponse.json(planningData)
   } catch {
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Type and name are required' }, { status: 400 })
     }
     const now = new Date().toISOString()
-    const item = await create('planningData', {
+    const item = await create('planning', {
       id: generateId(),
       userId: body.userId || (session.user as any).id,
       type: body.type,

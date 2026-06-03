@@ -11,6 +11,7 @@ import {
   majorTracks,
   resources,
   filterModules,
+  stateLawStats,
   type TrackId,
 } from '@/lib/education-data'
 
@@ -29,9 +30,11 @@ export default function EducationPage() {
       ? []
       : activeTrack === 'ai'
         ? aiModules
-        : activeTrack === 'all'
-          ? [...aiModules.slice(0, 4), ...catalogModules.slice(0, 8)]
-          : filterModules(activeTrack)
+        : activeTrack === 'state-laws'
+          ? filterModules('state-laws').slice(0, 12)
+          : activeTrack === 'all'
+            ? [...aiModules.slice(0, 4), ...catalogModules.slice(0, 8)]
+            : filterModules(activeTrack)
 
   return (
     <>
@@ -54,12 +57,13 @@ export default function EducationPage() {
               1099 partners, and career builders.
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-              <Link
-                href="/login"
-                className="rounded-xl gradient-bg px-8 py-3.5 text-sm font-semibold text-white transition-all hover:opacity-90 glow"
-              >
-                Start Learning — Portal Login
-              </Link>
+                    <Link
+                      href={`/education/course/${mod.id}`}
+                      className="rounded-xl border border-[var(--color-border)] bg-white px-6 py-3.5 text-center text-sm font-semibold text-[var(--color-primary)] hover:bg-[var(--color-surface-alt)]"
+                    >
+                      Start Learning
+                    </Link>
+
               <Link
                 href="/careers"
                 className="rounded-xl border border-[var(--color-border)] bg-white px-8 py-3.5 text-sm font-semibold text-[var(--color-primary)] transition-all hover:bg-[var(--color-surface-alt)]"
@@ -85,6 +89,42 @@ export default function EducationPage() {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* State Life & Health Laws */}
+      <section className="pb-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-3xl border border-[var(--color-border)] bg-gradient-to-br from-[var(--color-primary)]/5 via-white to-[var(--color-accent)]/5 p-8 sm:p-10">
+            <div className="relative grid gap-8 lg:grid-cols-2 lg:items-center">
+              <div>
+                <span className="section-label">Licensing Prep</span>
+                <h2 className="mt-3 text-2xl font-bold sm:text-3xl">
+                  Life & Health Laws — <span className="gradient-text">Every State</span>
+                </h2>
+                <p className="mt-3 max-w-xl text-sm leading-relaxed text-[var(--color-muted)]">
+                  {stateLawStats.courses} state-specific study courses across all 50 states and D.C. covering
+                  life and accident & health regulations, producer licensing, replacements, unfair trade practices, and
+                  exam checklists for each department of insurance.
+                </p>
+              </div>
+              <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
+                <Link
+                  href="/education/state-laws"
+                  className="rounded-xl gradient-bg px-6 py-3.5 text-center text-sm font-semibold text-white hover:opacity-90 glow"
+                >
+                  Browse State Courses
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setActiveTrack('state-laws')}
+                  className="rounded-xl border border-[var(--color-border)] bg-white px-6 py-3.5 text-center text-sm font-semibold text-[var(--color-primary)] hover:bg-[var(--color-surface-alt)]"
+                >
+                  Filter catalog below
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -116,12 +156,17 @@ export default function EducationPage() {
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {aiModules.map((mod, i) => (
               <div key={mod.id} className={i === 0 ? 'sm:col-span-2' : ''}>
-                <LearningModuleCard
-                  module={mod}
-                  index={i}
-                  featured={i === 0}
-                  onClick={() => window.location.href = '/login'}
-                />
+                      <LearningModuleCard
+                        module={mod}
+                        index={i}
+                        onClick={() => {
+                          if (activeTrack === 'state-laws' || mod.tags?.includes('State Law')) {
+                            window.location.href = `/education/state-laws?state=${mod.tags?.[0] ?? ''}`
+                            return
+                          }
+                          window.location.href = `/education/course/${mod.id}`
+                        }}
+                      />
               </div>
             ))}
           </div>
@@ -199,9 +244,25 @@ export default function EducationPage() {
                     key={mod.id}
                     module={mod}
                     index={i}
-                    onClick={() => (window.location.href = '/login')}
+                    onClick={() => {
+                      if (activeTrack === 'state-laws' || mod.tags?.includes('State Law')) {
+                        window.location.href = `/education/state-laws?state=${mod.tags?.[0] ?? ''}`
+                        return
+                      }
+                      window.location.href = '/login'
+                    }}
                   />
                 ))}
+                {activeTrack === 'state-laws' && (
+                  <div className="sm:col-span-2 lg:col-span-3 flex justify-center pt-4">
+                    <Link
+                      href="/education/state-laws"
+                      className="text-sm font-semibold text-[var(--color-accent)] hover:underline"
+                    >
+                      View all {stateLawStats.courses} state law courses →
+                    </Link>
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>

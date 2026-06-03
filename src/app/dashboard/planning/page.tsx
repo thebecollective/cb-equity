@@ -2,6 +2,17 @@
 
 import { useState } from 'react'
 import StatsCard from '@/components/dashboard/StatsCard'
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area
+} from 'recharts'
 
 type Tab = 'net_worth' | 'retirement' | 'cash_flow' | 'estate' | 'tax' | 'scenario'
 
@@ -219,11 +230,26 @@ function RetirementPlanner({ onSave }: { onSave: () => void }) {
   const yearsToRetirement = Math.max(0, retirementAge - currentAge)
   const monthlyRate = expectedReturn / 100 / 12
   const totalMonths = yearsToRetirement * 12
-  const projectedSavings =
-    totalMonths > 0
-      ? currentSavings * Math.pow(1 + monthlyRate, totalMonths) +
-        monthlyContribution * ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate)
-      : currentSavings
+  
+  const generateGrowthData = () => {
+    const data = []
+    let current = currentSavings
+    for (let year = 0; year <= yearsToRetirement; year++) {
+      data.push({
+        year: currentAge + year,
+        value: Math.round(current),
+      })
+      for (let month = 0; month < 12; month++) {
+        current = (current * (1 + monthlyRate)) + monthlyContribution
+      }
+    }
+    return data
+  }
+
+  const projectedSavings = generateGrowthData().length > 0 
+    ? generateGrowthData()[generateGrowthData().length - 1].value 
+    : currentSavings
+    
   const annualIncome = projectedSavings * 0.04
 
   const handleSave = async () => {
@@ -250,62 +276,81 @@ function RetirementPlanner({ onSave }: { onSave: () => void }) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
-          <div className="space-y-3">
-            {([
-              { key: 'currentAge' as const, label: 'Current Age', suffix: '' as string | undefined },
-              { key: 'retirementAge' as const, label: 'Retirement Age', suffix: '' as string | undefined },
-              { key: 'currentSavings' as const, label: 'Current Savings', prefix: '$' as string | undefined },
-              { key: 'monthlyContribution' as const, label: 'Monthly Contribution', prefix: '$' as string | undefined },
-              { key: 'expectedReturn' as const, label: 'Expected Return Rate', suffix: '%' as string | undefined },
-              { key: 'annualExpenses' as const, label: 'Current Annual Expenses', prefix: '$' as string | undefined },
-            ]).map(({ key, label, prefix, suffix }) => (
-              <div key={key}>
-                <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
-                <div className="relative">
-                  {prefix && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">{prefix}</span>}
-                  <input
-                    type="number"
-                    min="0"
-                    value={form[key as keyof RetirementForm]}
-                    onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                    className={`w-full ${prefix ? 'pl-7' : ''} ${suffix ? 'pr-7' : ''} px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]`}
-                    placeholder="0"
-                  />
-                  {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">{suffix}</span>}
-                </div>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 space-y-3">
+          <h3 className="text-sm font-semibold text-gray-900 mb-4">Parameters</h3>
+          {([
+            { key: 'currentAge' as const, label: 'Current Age', suffix: '' as string | undefined },
+            { key: 'retirementAge' as const, label: 'Retirement Age', suffix: '' as string | undefined },
+            { key: 'currentSavings' as const, label: 'Current Savings', prefix: '$' as string | undefined },
+            { key: 'monthlyContribution' as const, label: 'Monthly Contribution', prefix: '$' as string | undefined },
+            { key: 'expectedReturn' as const, label: 'Expected Return Rate', suffix: '%' as string | undefined },
+            { key: 'annualExpenses' as const, label: 'Current Annual Expenses', prefix: '$' as string | undefined },
+          ]).map(({ key, label, prefix, suffix }) => (
+            <div key={key}>
+              <label className="block text-xs font-medium text-gray-600 mb-1">{label}</label>
+              <div className="relative">
+                {prefix && <span className="absolute left-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">{prefix}</span>}
+                <input
+                  type="number"
+                  min="0"
+                  value={form[key as keyof RetirementForm]}
+                  onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                  className={`w-full ${prefix ? 'pl-7' : ''} ${suffix ? 'pr-7' : ''} px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]`}
+                  placeholder="0"
+                />
+                {suffix && <span className="absolute right-3 top-1/2 -translate-y-1/2 text-sm text-gray-400">{suffix}</span>}
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
 
-        <div className="space-y-4">
+        <div className="lg:col-span-2 space-y-4">
           {showResults ? (
             <>
-              <StatsCard
-                title="Years to Retirement"
-                value={yearsToRetirement}
-                icon={<span>⏳</span>}
-                color="#c9a84c"
-              />
-              <StatsCard
-                title="Projected Savings at Retirement"
-                value={formatCurrency(projectedSavings)}
-                icon={<span>💰</span>}
-                color="#1e3a5f"
-              />
-              <StatsCard
-                title="Annual Income (4% Rule)"
-                value={formatCurrency(annualIncome)}
-                icon={<span>📊</span>}
-                color="#059669"
-                change={
-                  annualExpenses > 0
-                    ? `${((annualIncome / annualExpenses) * 100).toFixed(0)}% of expenses`
-                    : undefined
-                }
-              />
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <StatsCard
+                  title="Years to Retirement"
+                  value={yearsToRetirement}
+                  icon={<span>⏳</span>}
+                  color="#c9a84c"
+                />
+                <StatsCard
+                  title="Projected Savings"
+                  value={formatCurrency(projectedSavings)}
+                  icon={<span>💰</span>}
+                  color="#1e3a5f"
+                />
+                <StatsCard
+                  title="Annual Income (4%)"
+                  value={formatCurrency(annualIncome)}
+                  icon={<span>📊</span>}
+                  color="#059669"
+                  change={
+                    annualExpenses > 0
+                      ? `${((annualIncome / annualExpenses) * 100).toFixed(0)}% of expenses`
+                      : undefined
+                  }
+                />
+              </div>
+              <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 h-64">
+                <h3 className="text-sm font-semibold text-gray-900 mb-4">Savings Growth Projection</h3>
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={generateGrowthData()}>
+                    <defs>
+                      <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#1e3a5f" stopOpacity={0.3}/>
+                        <stop offset="95%" stopColor="#1e3a5f" stopOpacity={0}/>
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                    <XAxis dataKey="year" label={{ value: 'Age', position: 'insideBottom', offset: -5 }} tick={{fontSize: 12}} />
+                    <YAxis tickFormatter={(val) => `$${(val/1000000).toFixed(1)}M`} tick={{fontSize: 12}} />
+                    <Tooltip formatter={(value: any) => formatCurrency(Number(value))} />
+                    <Area type="monotone" dataKey="value" stroke="#1e3a5f" fillOpacity={1} fill="url(#colorValue)" strokeWidth={2} />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
             </>
           ) : (
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center justify-center h-full">
@@ -753,15 +798,18 @@ function ScenarioSimulator({ onSave }: { onSave: () => void }) {
   const calculateFutureValue = () => {
     let current = assets
     const history = []
-    for (let i = 1; i <= years; i++) {
+    for (let i = 0; i <= years; i++) {
+      history.push({
+        year: i,
+        value: Math.round(current),
+      })
       current = (current * (1 + growth)) - withdrawal
-      history.push(current)
     }
     return history
   }
 
   const history = calculateFutureValue()
-  const finalValue = history[history.length - 1] || 0
+  const finalValue = history[history.length - 1]?.value || 0
 
   return (
     <div className="space-y-6">
@@ -771,38 +819,40 @@ function ScenarioSimulator({ onSave }: { onSave: () => void }) {
         <StatsCard title="Sustainability" value={finalValue > 0 ? 'Sustainable' : 'Risk of Depletion'} icon={<span>⚠️</span>} color={finalValue > 0 ? '#059669' : '#dc2626'} />
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="space-y-4">
           <h3 className="font-bold text-gray-900 mb-2">Scenario Parameters</h3>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Starting Assets ($)</label>
-            <input type="number" value={scenario.currentAssets} onChange={e => setScenario({...scenario, currentAssets: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none" />
+            <input type="number" value={scenario.currentAssets} onChange={e => setScenario({...scenario, currentAssets: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a5f]/20" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Expected Growth Rate (%)</label>
-            <input type="number" value={scenario.annualGrowth} onChange={e => setScenario({...scenario, annualGrowth: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none" />
+            <input type="number" value={scenario.annualGrowth} onChange={e => setScenario({...scenario, annualGrowth: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a5f]/20" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Annual Withdrawal ($)</label>
-            <input type="number" value={scenario.annualWithdrawal} onChange={e => setScenario({...scenario, annualWithdrawal: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none" />
+            <input type="number" value={scenario.annualWithdrawal} onChange={e => setScenario({...scenario, annualWithdrawal: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a5f]/20" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-600 mb-1">Time Horizon (Years)</label>
-            <input type="number" value={scenario.years} onChange={e => setScenario({...scenario, years: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none" />
+            <input type="number" value={scenario.years} onChange={e => setScenario({...scenario, years: e.target.value})} className="w-full px-3 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-[#1e3a5f]/20" />
           </div>
         </div>
-        <div className="flex flex-col justify-center items-center p-6 bg-gray-50 rounded-2xl border border-dashed border-gray-300">
-           <div className="text-center">
-             <p className="text-sm text-gray-500 mb-2">Estimated Outcome</p>
-             <p className={`text-4xl font-bold ${finalValue > 0 ? 'text-green-600' : 'text-red-600'}`}>
-               {formatCurrency(finalValue)}
-             </p>
-             <p className="text-xs text-gray-400 mt-2">Calculated using compound growth minus annual withdrawals.</p>
-           </div>
+        <div className="lg:col-span-2 h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={history}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+              <XAxis dataKey="year" label={{ value: 'Years', position: 'insideBottom', offset: -5 }} tick={{fontSize: 12}} />
+              <YAxis tickFormatter={(val) => `$${(val/1000000).toFixed(1)}M`} tick={{fontSize: 12}} />
+              <Tooltip formatter={(value: any) => formatCurrency(Number(value))} />
+              <Line type="monotone" dataKey="value" stroke={finalValue > 0 ? '#059669' : '#dc2626'} strokeWidth={3} dot={false} />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </div>
       <div className="flex justify-end">
-        <button onClick={onSave} className="px-4 py-2 bg-[#1e3a5f] text-white text-sm font-medium rounded-lg">Save Scenario</button>
+        <button onClick={onSave} className="px-4 py-2 bg-[#1e3a5f] text-white text-sm font-medium rounded-lg hover:bg-[#1e3a5f]/90 transition-colors">Save Scenario</button>
       </div>
     </div>
   )
