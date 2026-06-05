@@ -5,8 +5,8 @@ import Navbar from "@/components/Navbar"
 import Footer from "@/components/Footer"
 import ExitPopup from "@/components/ExitPopup"
 import AIConcierge from "@/components/AIConcierge"
-
-
+import { BrandProvider } from '@/context/BrandContext'
+import BookingModal from '@/components/BookingModal'
 
 const inter = Inter({
   subsets: ["latin"],
@@ -40,12 +40,6 @@ export const metadata: Metadata = {
   }
 }
 
-import './globals.css'
-import { BrandProvider } from '@/context/BrandContext'
-import Footer from '@/components/Footer'
-import BookingModal from '@/components/BookingModal'
-
-// Final launch build - verified and optimized
 export default function RootLayout({
   children,
 }: {
@@ -68,4 +62,3 @@ export default function RootLayout({
     </html>
   )
 }
-
