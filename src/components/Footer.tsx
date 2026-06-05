@@ -1,96 +1,83 @@
-import Link from 'next/link'
+"use client"
 
-const footerLinks = [
-  {
-    title: 'Services',
-    links: [
-      { href: '/services', label: 'Financial Planning' },
-      { href: '/services', label: 'Insurance Solutions' },
-      { href: '/services', label: 'Wealth Management' },
-      { href: '/services', label: 'Securities & Fixed Income' },
-    ],
-  },
-  {
-    title: 'Opportunities',
-    links: [
-      { href: '/careers', label: 'Internships' },
-      { href: '/careers', label: '1099 Positions' },
-      { href: '/pricing', label: 'Compensation Guide' },
-      { href: '/education', label: 'Education Center' },
-      { href: '/referrals', label: 'Referral Program' },
-    ],
-  },
-  {
-    title: 'Company',
-    links: [
-      { href: '/about', label: 'About Us' },
-      { href: '/portfolio', label: 'Client Results' },
-      { href: '/tools', label: 'Advisor Tools' },
-      { href: '/contact', label: 'Contact' },
-      { href: '/login', label: 'Portal Login' },
-    ],
-  },
-  {
-    title: 'Legal',
-    links: [
-      { href: '/privacy', label: 'Privacy Policy' },
-      { href: '/terms', label: 'Terms of Service' },
-      { href: '/compliance', label: 'Form ADV' },
-      { href: '/disclosures', label: 'Legal Disclosures' },
-    ],
-  },
-]
+import React from 'react'
+import { ShieldCheck, Mail, Phone, MapPin, ExternalLink } from 'lucide-react'
+import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="gradient-bg text-white">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-5">
-          <div className="space-y-4 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-sm font-bold text-white">
-                CB
-              </div>
-              <div>
-                <span className="text-base font-semibold">CB Equity</span>
-                <span className="block text-[9px] leading-none tracking-[0.15em] uppercase text-[var(--color-accent-light)]">
-                  Financial Advisory
-                </span>
-              </div>
-            </Link>
-            <p className="text-sm leading-relaxed text-white/65">
-              Brooke Adams & Connor Savenas — financial planning, insurance, securities, 
-              annuities, and wealth management with integrity.
-            </p>
+    <footer className="bg-navy-900 text-white pt-16 pb-8 px-6 border-t border-navy-800 relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gold-600/10 blur-3xl rounded-full -translate-y-1/2 translate-x-1/2" />
+      
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
+        {/* Brand Section */}
+        <div className="col-span-1 md:col-span-2 space-y-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gold-500 rounded-xl flex items-center justify-center font-black text-navy-900 text-xl">CB</div>
+            <h3 className="text-2xl font-bold">CB Equity</h3>
           </div>
-          {footerLinks.map((group) => (
-            <div key={group.title}>
-              <h3 className="mb-4 text-[10px] font-semibold tracking-[0.15em] uppercase text-white/45">
-                {group.title}
-              </h3>
-              <ul className="space-y-2.5">
-                {group.links.map((link) => (
-                  <li key={link.label}>
-                    <Link href={link.href} className="text-sm text-white/65 transition-colors hover:text-white">
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          <p className="text-slate-400 max-w-sm leading-relaxed">
+            Providing institutional-grade financial engineering and strategic wealth optimization for high-net-worth families and elite producers.
+          </p>
+          <div className="flex gap-4">
+            <Link href="#" className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all text-slate-400 hover:text-gold-400">
+              <Mail className="w-5 h-5" />
+            </Link>
+            <Link href="#" className="p-2 bg-white/5 hover:bg-white/10 rounded-lg transition-all text-slate-400 hover:text-gold-400">
+              <Phone className="w-5 h-5" />
+            </Link>
+          </div>
         </div>
-        <div className="mt-12 border-t border-white/10 pt-8 text-center text-sm text-white/45">
-          <p>&copy; {new Date().getFullYear()} CB Equity Financial Advisory. All rights reserved.</p>
-          <p className="mx-auto mt-4 max-w-4xl text-[10px] leading-relaxed uppercase tracking-wider opacity-60">
-            Important Disclosure: Investment advisory services offered through CB Equity. 
-            Insurance products and services are offered through licensed insurance producers. 
-            Past performance is no guarantee of future results. Please consult with a professional regarding your specific financial situation.
+
+        {/* Quick Links */}
+        <div className="space-y-6">
+          <h4 className="font-bold text-lg">Quick Access</h4>
+          <ul className="space-y-3 text-slate-400 text-sm">
+            <li><Link href="/tools/wealth-gap" className="hover:text-gold-400 transition-colors">Wealth Gap Simulator</Link></li>
+            <li><Link href="/tools/stress-tester" className="hover:text-gold-400 transition-colors">Stress Tester</Link></li>
+            <li><Link href="/tools/tax-scanner" className="hover:text-gold-400 transition-colors">Tax Alpha Scanner</Link></li>
+            <li><Link href="/careers/roi-calculator" className="hover:text-gold-400 transition-colors">Advisor ROI</Link></li>
+          </ul>
+        </div>
+
+        {/* Contact Info */}
+        <div className="space-y-6">
+          <h4 className="font-bold text-lg">Headquarters</h4>
+          <ul className="space-y-3 text-slate-400 text-sm">
+            <li className="flex items-start gap-3">
+              <MapPin className="w-4 h-4 text-gold-500 mt-1" />
+              <span>Private Client Suite<br />Financial District, USA</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* COMPLIANCE SECTION */}
+      <div className="max-w-7xl mx-auto mt-16 pt-8 border-t border-white/10">
+        <div className="bg-white/5 p-6 rounded-2xl border border-white/10">
+          <div className="flex items-center gap-2 text-gold-500 font-bold text-xs uppercase tracking-widest mb-4">
+            <ShieldCheck className="w-4 h-4" /> Legal Disclosures & Compliance
+          </div>
+          <p className="text-[10px] leading-relaxed text-slate-500 text-justify">
+            DISCLAIMER: CB Equity and its associated tools are provided for informational and educational purposes only. 
+            The information contained herein does not constitute a solicitation, recommendation, or offer to buy or sell any 
+            security, financial product, or insurance policy. All financial projections, including those generated by the Wealth Gap 
+            Simulator, Stress Tester, and Tax Alpha Scanner, are hypothetical in nature and are not a guarantee of future results. 
+            Investment involves risk, including the possible loss of principal. 
+            <br /><br />
+            Past performance is not indicative of future results. Tax laws are subject to change and vary by jurisdiction; 
+            users are strongly encouraged to consult with a certified public accountant (CPA) or a qualified tax attorney before 
+            implementing any strategies discussed on this platform. CB Equity is not a registered investment advisor (RIA) 
+            unless explicitly stated. All "Alpha" and "Optimization" terms refer to strategic goals and not guaranteed returns.
           </p>
-          <p className="mx-auto mt-2 max-w-3xl text-xs leading-relaxed">
-            Securities offered through registered representatives. Insurance products offered through licensed agents.
-            This site is for informational purposes only and does not constitute an offer to sell or a solicitation of an offer to buy.
-          </p>
+        </div>
+        <div className="mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-slate-500 text-xs">
+          <p>© 2026 CB Equity. All rights reserved.</p>
+          <div className="flex gap-6">
+            <Link href="#" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="#" className="hover:text-white transition-colors">Compliance</Link>
+          </div>
         </div>
       </div>
     </footer>

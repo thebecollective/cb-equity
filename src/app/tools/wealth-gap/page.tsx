@@ -189,25 +189,7 @@ export default function WealthGapSimulator() {
                 <motion.button 
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={async () => {
-                    try {
-                      await fetch('/api/capture', {
-                        method: 'POST',
-                        body: JSON.stringify({
-                          email: '', // Prompt for email or use session
-                          source: 'wealth-gap-simulator',
-                          data: { 
-                            currentSavings: inputs.currentSavings, 
-                            dreamGoal: inputs.dreamGoal, 
-                            gap: gap 
-                          }
-                        })
-                      })
-                      alert('Your analysis has been sent to our strategists. We will contact you shortly to close the gap!')
-                    } catch (e) {
-                      alert('Something went wrong. Please try again.')
-                    }
-                  }}
+                  onClick={() => window.dispatchEvent(new Event('open-booking'))}
                   className="w-full md:w-auto py-4 px-8 bg-gold-500 hover:bg-gold-400 text-navy-900 font-bold rounded-2xl flex items-center justify-center gap-3 transition-all text-lg shadow-lg shadow-gold-500/20"
                 >
                   Close the Gap <ArrowRight className="w-5 h-5" />

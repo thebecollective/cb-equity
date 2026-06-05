@@ -40,22 +40,31 @@ export const metadata: Metadata = {
   }
 }
 
+import './globals.css'
+import { BrandProvider } from '@/context/BrandContext'
+import Footer from '@/components/Footer'
+import BookingModal from '@/components/BookingModal'
+
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <html lang="en" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[var(--color-background)] text-[var(--color-foreground)] font-sans">
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-        <ExitPopup />
-        <AIConcierge />
+    <html lang="en">
+      <body className="antialiased overflow-x-hidden">
+        <div className="aurora-bg" />
+        <BrandProvider>
+          <div className="flex flex-col min-h-screen">
+            <main className="flex-grow overflow-x-hidden">
+              {children}
+            </main>
+            <Footer />
+          </div>
+          <BookingModal />
+        </BrandProvider>
       </body>
-
-
     </html>
   )
 }
+
