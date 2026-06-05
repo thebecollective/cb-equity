@@ -1,13 +1,13 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import LearningModuleCard from '@/components/education/LearningModuleCard'
 import { generateStateCourses, LineOfAuthority } from '@/lib/state-insurance-laws'
 import StatsCard from '@/components/dashboard/StatsCard'
 
-export default function StateLawsEducationPage() {
+function StateLawsContent() {
   const searchParams = useSearchParams()
   const [selectedState, setSelectedState] = useState<string>('TX')
   const [lineOfAuthority, setLineOfAuthority] = useState<LineOfAuthority>('life')
@@ -145,5 +145,13 @@ export default function StateLawsEducationPage() {
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #d1d5db; }
       `}</style>
     </div>
+  )
+}
+
+export default function StateLawsEducationPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading...</div>}>
+      <StateLawsContent />
+    </Suspense>
   )
 }

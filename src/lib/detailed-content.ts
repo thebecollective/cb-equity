@@ -17,8 +17,9 @@ export interface Lesson {
   aiPrompt?: string
 }
 
-export interface DetailedModule extends LearningModule {
+export interface DetailedModule extends Omit<LearningModule, 'lessons'> {
   lessons: Lesson[]
+  track: string
 }
 
 export type TrackId = 'all' | 'insurance' | 'financial' | 'wholesale' | 'business' | 'ai' | 'majors' | 'state-laws'

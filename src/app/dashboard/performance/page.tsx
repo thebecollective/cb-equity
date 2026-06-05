@@ -102,7 +102,7 @@ export default function PerformancePage() {
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
                 <XAxis dataKey="month" tick={{fontSize: 12}} axisLine={false} tickLine={false} />
                 <YAxis tickFormatter={(val) => `$${val/1000}k`} tick={{fontSize: 12}} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(val) => `$${val.toLocaleString()}`} />
+                <Tooltip formatter={(val) => `$${(val || 0).toLocaleString()}`} />
                 <Area type="monotone" dataKey="revenue" stroke="#1e3a5f" fillOpacity={1} fill="url(#colorRev)" strokeWidth={3} />
               </AreaChart>
             </ResponsiveContainer>
@@ -117,7 +117,7 @@ export default function PerformancePage() {
                 <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#f0f0f0" />
                 <XAxis type="number" hide />
                 <YAxis dataKey="stage" type="category" tick={{fontSize: 12}} width={100} axisLine={false} tickLine={false} />
-                <Tooltip formatter={(val) => `${val}%`} />
+                <Tooltip formatter={(val) => `${val || 0}%`} />
                 <Bar dataKey="value" radius={[0, 4, 4, 0]}>
                   {funnelData.map((entry, index) => (
                     <rect key={`cell-${index}`} fill={entry.color} />

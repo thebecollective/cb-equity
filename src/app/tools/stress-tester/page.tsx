@@ -233,7 +233,7 @@ export default function StressTester() {
                               tick={{ fontSize: 12 }} 
                               tickFormatter={(v) => `$${(v/1000000).toFixed(1)}M`} 
                             />
-                            <Tooltip formatter={(v) => [`$${v.toLocaleString()}`, 'Value']} />
+                            <Tooltip formatter={(v) => [`$${(v || 0).toLocaleString()}`, 'Value']} />
                             <Area type="monotone" dataKey="value" stroke="#ef4444" fillOpacity={1} fill="url(#colorValue)" strokeWidth={3} />
                           </AreaChart>
                         </ResponsiveContainer>

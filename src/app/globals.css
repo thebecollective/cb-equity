@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root {
   --primary: #1e3a5f;
@@ -28,7 +26,10 @@ body {
 }
 
 .glass-card {
-  @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-[0_8px_32px_0_rgba(31,38,135,0.07)];
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
 }
 
 .luxury-shadow {
@@ -36,5 +37,8 @@ body {
 }
 
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-linear-to-br from-navy-900 via-navy-800 to-slate-700;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-image: linear-gradient(to bottom right, #1e3a5f, #1a2f4e, #64748b);
 }

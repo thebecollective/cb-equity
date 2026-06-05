@@ -101,6 +101,7 @@ export function stateCoursesAsLearningModules(): LearningModule[] {
 
 export const stateLawStats = {
   courses: STATES.length * 2,
+  states: STATES.length,
   totalLessons: STATES.length * 2 * 7,
   categories: ['Life', 'Health']
 }

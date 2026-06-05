@@ -60,7 +60,7 @@ export default function OnboardingConcierge() {
             <motion.div 
               key={step.id}
               onClick={() => setActiveStep(step.id)}
-              className={`relative z-10 flex items-start gap-6 cursor-pointer group ${activeStep === step.id ? 'opacity-100' : 'opacity-60 hover:opacity-80'}`}
+              className={`relative z-10 flex items-start gap-6 cursor-pointer group ${activeStep === step.id ? 'opacity-100' : 'opacity-60, hover:opacity-80'}`}
             >
               <div className={`p-3 rounded-full shrink-0 transition-all ${
                 step.status === 'completed' ? 'bg-emerald-500 text-white' : 
@@ -175,9 +175,9 @@ export default function OnboardingConcierge() {
                 </motion.button>
               </div>
             </motion.div>
-          )}
         </AnimatePresence>
       </div>
+    </div>
     </div>
   )
 }

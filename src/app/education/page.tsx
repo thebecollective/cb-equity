@@ -58,7 +58,7 @@ export default function EducationPage() {
             </p>
             <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
                     <Link
-                      href={`/education/course/${mod.id}`}
+                      href={`/education/course/${displayedModules[0]?.id || 'all'}`}
                       className="rounded-xl border border-[var(--color-border)] bg-white px-6 py-3.5 text-center text-sm font-semibold text-[var(--color-primary)] hover:bg-[var(--color-surface-alt)]"
                     >
                       Start Learning

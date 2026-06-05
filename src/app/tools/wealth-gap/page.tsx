@@ -156,7 +156,7 @@ export default function WealthGapSimulator() {
                     tickFormatter={(value) => `$${(value/1000000).toFixed(1)}M`}
                   />
                   <Tooltip 
-                    formatter={(value) => [`$${value.toLocaleString()}`, '']}
+                    formatter={(value) => [`$${(value || 0).toLocaleString()}`, '']}
                     contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }}
                   />
                   <Bar dataKey="value" radius={[10, 10, 0, 0]} barSize={80}>

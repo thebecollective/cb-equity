@@ -229,7 +229,7 @@ export default function TaxAlphaScanner() {
                                 <Cell key={`cell-${index}`} fill={entry.color} />
                               ))}
                             </Pie>
-                            <Tooltip formatter={(v) => `$${v.toLocaleString()}`} />
+                            <Tooltip formatter={(v) => `$${(v || 0).toLocaleString()}`} />
                           </PieChart>
                         </ResponsiveContainer>
                       </div>

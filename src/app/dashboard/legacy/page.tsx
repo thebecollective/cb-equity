@@ -18,8 +18,8 @@ const FAMILY_TREE = {
       wealth: '$2.1M (Expected)',
       structure: 'Dynasty Trust',
       children: [
-        { id: 'gc-1', name: 'Grandchild A', role: 'Beneficiary', wealth: 'TBD', structure: 'Crummey Trust' },
-        { id: 'gc-2', name: 'Grandchild B', role: 'Beneficiary', wealth: 'TBD', structure: 'Crummey Trust' },
+        { id: 'gc-1', name: 'Grandchild A', role: 'Beneficiary', wealth: 'TBD', structure: 'Crummey Trust', children: [] },
+        { id: 'gc-2', name: 'Grandchild B', role: 'Beneficiary', wealth: 'TBD', structure: 'Crummey Trust', children: [] },
       ]
     },
     {
