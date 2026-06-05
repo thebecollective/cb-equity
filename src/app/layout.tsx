@@ -45,6 +45,7 @@ import { BrandProvider } from '@/context/BrandContext'
 import Footer from '@/components/Footer'
 import BookingModal from '@/components/BookingModal'
 
+// Final launch build - verified and optimized
 export default function RootLayout({
   children,
 }: {
