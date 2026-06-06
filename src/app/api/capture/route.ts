@@ -23,7 +23,7 @@ export async function POST(req: Request) {
       value: data?.estimatedValue || 0,
       createdAt: now,
       updatedAt: now,
-    }, 'system_admin') // System creates the lead
+    }, 'system')
 
     return NextResponse.json({ success: true, leadId: lead.id }, { status: 201 })
   } catch (error) {
