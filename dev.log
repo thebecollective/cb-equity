@@ -1,0 +1,22 @@
+
+> cb-equity@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://10.0.0.147:3000
+- Environments: .env.local
+✓ Ready in 608ms
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of /Users/brookeelizaadams/package-lock.json as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * /Users/brookeelizaadams/Downloads/cb-equity/package-lock.json
+
+
+(node:15990) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+○ Compiling / ...
+ GET / 200 in 4.1s (next.js: 3.8s, application-code: 309ms)
+ GET / 200 in 65ms (next.js: 9ms, application-code: 56ms)
